@@ -72,6 +72,9 @@
       (.setProxyDomain client-configuration proxy-domain))
     (when-let [proxy-workstation (get-in cred [:proxy :workstation])]
       (.setProxyWorkstation client-configuration proxy-workstation))
+    (when-let [use-v3-protocol (get-in cred [:use-v3-protocol])]
+      (.setSignerOverride client-configuration "S3SignerType")
+      (.setProtocol client-configuration com.amazonaws.Protocol/HTTP))
     (let [aws-creds
           (if (:token cred)
             (BasicSessionCredentials. (:access-key cred) (:secret-key cred) (:token cred))
